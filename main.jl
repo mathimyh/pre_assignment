@@ -1,32 +1,47 @@
 using Pkg
 
-
 using Random
 using Plots
+using CurveFit
+using DataStructures
 
 plotlyjs()
 
-function part1a(n::Int64)
+# Make a histogram of the probability function. 
+function part1(n::Int64)
+    
+    ### Task a) ###
     times = []
     # Run this as many times as you want, it will approach the actual probability distribution
     for i in 1:n
         pos = 0
-        # Use abs value as it does not matter if first step goes back or forward
         pos += rand()
         time = 1
-        # Count how many steps before it's over the line
-        while pos > 0 || time > 200
+        # Count how many steps before it's over the line, more than 200 is removed for performance
+        while pos > 0 && time < 200
             pos += rand(-1:1)
             time += 1
         end
-        push!(times, time)
+        # Don't want the abnormally large number of t=200 to affect the curvefit
+        if time != 200
+            push!(times, time)
+        end
     end
-    histogram(times)
-    xlims!(0, 100)
+
+    ### Task b) ###
+    # plotting = counter(times)
+    # println(plotting)
+    # # fit = curve_fit(ExpFit, x, y)
+    # # y0 = fit.(x)
+    # println(typeof(plotting))
+    # histogram(times)
+    # xlims!(0, 100)
+
 end
 
+
 function main()
-    part1a(1000)
+    part1(1000)
 end
 
 main()
